@@ -28,18 +28,18 @@ public class AVLTree {
             node.setLeft(insert(value, node.getLeft()));
             if (!balanceFactorValid(node)) {
                 if (value < node.getLeft().getValue()) {
-                    node = leftRotation(node);
+                    node = rightRotation(node);
                 } else {
-                    node = leftRightRotation(node);
+                    node = rightLeftRotation(node);
                 }
             }
         } else if (node.getValue() <= value) {
             node.setRight(insert(value, node.getRight()));
             if (!balanceFactorValid(node)) {
                 if (value > node.getRight().getValue()) {
-                    node = rightRotation(node);
+                    node = leftRotation(node);
                 } else {
-                    node = rightLeftRotation(node);
+                    node = leftRightRotation(node);
                 }
             }
         }
@@ -71,15 +71,15 @@ public class AVLTree {
         if (!balanceFactorValid(node)) {
             if (getBalanceFactor(node) >= 2) {
                 if ((getBalanceFactor(node.getLeft()) == 1) || (getBalanceFactor(node.getLeft()) == 0)) {
-                    node = leftRotation(node);
-                } else {
-                    node = leftRightRotation(node);
-                }
-            } else if (getBalanceFactor(node) <= -2) {
-                if ((getBalanceFactor(node.getRight()) == -1) || (getBalanceFactor(node.getRight()) == 0)) {
                     node = rightRotation(node);
                 } else {
                     node = rightLeftRotation(node);
+                }
+            } else if (getBalanceFactor(node) <= -2) {
+                if ((getBalanceFactor(node.getRight()) == -1) || (getBalanceFactor(node.getRight()) == 0)) {
+                    node = leftRotation(node);
+                } else {
+                    node = leftRightRotation(node);
                 }
             }
         }
@@ -116,7 +116,7 @@ public class AVLTree {
         return heightOf(node.getLeft()) - heightOf(node.getRight());
     }
 
-    private AVLTreeNode leftRotation(AVLTreeNode node) {
+    private AVLTreeNode rightRotation(AVLTreeNode node) {
         AVLTreeNode tempNode = node.getLeft();
         node.setLeft(tempNode.getRight());
         tempNode.setRight(node);
@@ -125,7 +125,7 @@ public class AVLTree {
         return tempNode;
     }
 
-    private AVLTreeNode rightRotation(AVLTreeNode node) {
+    private AVLTreeNode leftRotation(AVLTreeNode node) {
         AVLTreeNode tempNode = node.getRight();
         node.setRight(tempNode.getLeft());
         tempNode.setLeft(node);
@@ -134,13 +134,13 @@ public class AVLTree {
         return tempNode;
     }
 
-    private AVLTreeNode leftRightRotation(AVLTreeNode node) {
-        node.setLeft(rightRotation(node.getLeft()));
-        return leftRotation(node);
+    private AVLTreeNode rightLeftRotation(AVLTreeNode node) {
+        node.setLeft(leftRotation(node.getLeft()));
+        return rightRotation(node);
     }
 
-    private AVLTreeNode rightLeftRotation(AVLTreeNode node) {
-        node.setRight(leftRotation(node.getRight()));
-        return rightRotation(node);
+    private AVLTreeNode leftRightRotation(AVLTreeNode node) {
+        node.setRight(rightRotation(node.getRight()));
+        return leftRotation(node);
     }
 }
